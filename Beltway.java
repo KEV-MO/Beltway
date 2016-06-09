@@ -506,7 +506,7 @@ public class Beltway{
         while(incorrect < 5 && correct < 10){
             circ = createRandomArrFloyd(num,400);
             int[] t = createDistanceArray(circ);
-            /*
+            
             System.out.println("Circ:");
             printArr(circ);
             
@@ -543,12 +543,7 @@ public class Beltway{
 
     }
 
-    */
 
-
-
-
-/*
 
 ---------------------------------
  
