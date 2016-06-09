@@ -387,21 +387,6 @@ public class Beltway{
         return t;
     }
     
-    public static int[] createRandomCircArrayDense(int numElements, int length){
-        int im = 0;
-        int[] ret = new int[numElements];
-        Random random = new Random();
-        for(int i = 1; im < numElements && i < length; i++){
-            int rn = length - i;
-            int rm = numElements - im;
-            int rand = random.nextInt() % length;
-            if(rand < rm){
-                ret[im++] = i + 1;
-            }
-            
-        }
-        return ret;
-    }
                
     public static void printArr(int[] circ){
         System.out.print("{");
@@ -415,7 +400,7 @@ public class Beltway{
         System.out.print("}");
         System.out.println();
     }
-
+//Creates random inputs for testing, credit: http://stackoverflow.com/questions/1608181/unique-random-numbers-in-an-integer-array-in-the-c-programming-language
     public static int[] createRandomArrFloyd(int numElements, int length){
         boolean[] b = new boolean[length+1];
         Arrays.fill(b,false);
