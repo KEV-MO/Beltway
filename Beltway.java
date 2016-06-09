@@ -421,7 +421,6 @@ public class Beltway{
     }
 
 //This requires us to put the full length of the cycle in the last element, so we will have n(n-1) + 1 elements in array.
-//{2, 14, 51, 63, 66, 68, 85, 91, 96, 136, 159, 161, 183, 185, 188}
 
     public static void main(String[] args){
         int[] circ;
