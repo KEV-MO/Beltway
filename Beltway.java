@@ -444,7 +444,7 @@ public class Beltway{
         int incorrect = 0;
         int num = 20;
         while(incorrect < 5 && correct < 50){
-            circ = createRandomArrFloyd(num,512);
+            circ = createRandomArrFloyd(num,400);
             int[] t = createDistanceArray(circ);
             
             System.out.println("Circ:");
