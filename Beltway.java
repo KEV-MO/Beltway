@@ -105,8 +105,6 @@ public class Beltway{
 
         a = greedyRotationMap(a,distances);
         while(!equalsArrayList(test,a)){
-            //blockMap = createUnusedBlockMap(distances,numIntegerPoints);
-
             System.out.println(a);
             a = greedyRotationMap(a,distances);
         }
@@ -166,24 +164,7 @@ public class Beltway{
     }
 
 
-/*
-    public static ArrayList<Integer> createGreedyMap(int[] distances){
-        int i = 1;
-        int w = distances[distances.length-1];
-        ArrayList<Integer> a = new ArrayList<>();
-        HashMap<Integer,Integer> currDist = createUnusedDistMap(a,distances);
-        a.add(0);
-        while(i <= w){
-            if(canAdd(a,currDist,i,w)){
-                eraseDistances(a,currDist,i,w);
-                a.add(i);
-            }
-            i++;
-        }
 
-        return a;
-    }
-*/
     public static ArrayList<Integer> createGreedyMap(int[] distances){
         int w = distances[distances.length-1];
         ArrayList<Integer> a = new ArrayList<>();
@@ -334,27 +315,6 @@ public class Beltway{
 
     }
 
-    public static ArrayList<Integer> backtrack(int[] distances, ArrayList<Integer> gr, int totalRotations, int numIntegerPoints, ArrayList<ArrayList<Integer>> collec){
-
-        gr = buildSetByBacktrack(distances,gr,numIntegerPoints);
-
-        return beltwaySolutionsMap(distances,gr,totalRotations,Integer.MAX_VALUE,collec);
-    }
-
-
-    public static ArrayList<Integer> buildSetByBacktrack(int[] distances, ArrayList<Integer> gr, int numIntegerPoints){ 
-        ArrayList<Integer> temp = copyArrList(gr);
-        gr.remove(gr.size()-1);
-        greedilyAdd(distances,gr,gr.size()-1);
-        
-        while(equalsArrayList(temp,gr)){
-            gr.remove(gr.size()-1);
-            gr.remove(gr.size()-2);
-            gr = greedilyAdd(distances,gr,gr.size()-1);
-        }
-
-        return gr;
-    }
 
     public static ArrayList<Integer> greedilyAdd(int[] distances, ArrayList<Integer> gr, int begin){
         gr = canonicalForm(gr);
@@ -401,23 +361,7 @@ public class Beltway{
         }
         return false;
     }
-/*
-    public static ArrayList<Integer> greedilyAdd(int[] distances, ArrayList<Integer> gr, int begin){
-        gr = canonicalForm(gr);
-        int i = begin;
-        int w = distances[distances.length-1];
-        ArrayList<Integer> a = new ArrayList<>();
-        HashMap<Integer,Integer> currDist = createUnusedDistMap(gr,distances);
-        while(i <= w){
-            if(canAdd(gr,currDist,i,w)){
-                eraseDistances(gr,currDist,i,w);
-                gr.add(i);
-            }
-            i++;
-        }
-        return gr;
-    }
-    */
+
     //Assumes we have some number of elements, NOT including 0, largest element is circumference of beltway
     public static int[] createDistanceArray(int[] circ){
         int L = circ[circ.length-1];
@@ -493,10 +437,6 @@ public class Beltway{
 
 //This requires us to put the full length of the cycle in the last element, so we will have n(n-1) + 1 elements in array.
 //{2, 14, 51, 63, 66, 68, 85, 91, 96, 136, 159, 161, 183, 185, 188}
-
-
-
-
 
     public static void main(String[] args){
         int[] circ;
