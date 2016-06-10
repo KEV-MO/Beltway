@@ -43,24 +43,5 @@ public class ArrayListHolder{
     public String toString(){
         return this.a.toString();
     }
-    
-    public static void main(String[] args){
-        ArrayList<Integer> a = new ArrayList<>();
-        ArrayList<Integer> b = new ArrayList<>();
-        a.add(1);
-        b.add(1);
-        a.add(2);
-        b.add(2);
-        ArrayListHolder alh = new ArrayListHolder(a);
-        ArrayListHolder alh2 = new ArrayListHolder(b);
-
-        HashMap<ArrayListHolder,Boolean> hm = new HashMap<>();
-        hm.put(alh,true);
-        System.out.println("Is a in hashmap?: ");
-        System.out.println(hm.get(alh));
-        System.out.println("Is b in hashmap?: ");
-        System.out.println(hm.get(alh2));
-        
-    }
 
 }
