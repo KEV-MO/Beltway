@@ -250,6 +250,8 @@ public class Beltway{
     }
 
 
+/*Returns an empty arraylist if no beltway satisfies distance set, otherwise it returns a set of n+2 integer points 
+around a beltway of circumference w in the form : {0,d1,d2,...dn,w} where w = 0 (mod circumference) */
     public static ArrayList<Integer> beltwaySolutionsMap(int[] distances, ArrayList<Integer> initial){
 
         ArrayList<Integer> gr = initial;
@@ -285,7 +287,6 @@ public class Beltway{
             }
         }
     }
-    //
     public static ArrayList<Integer> createNextInitial(HashMap<ArrayListHolder,Boolean> collec, int[] distances, ArrayList<Integer> initial){
         ArrayList<Integer> test = initial;
         ArrayListHolder t = new ArrayListHolder(test);
