@@ -6,7 +6,7 @@ For Questions contact wasil017@umn.edu
 import java.util.*;
 
 
-public class Beltway{
+public class BeltwayV20{
 
 
     //Utility methods
@@ -212,7 +212,7 @@ public class Beltway{
         }
         return ret;
     }
-//addAllArrays not needed in current version
+
     public static HashMap<ArrayListHolder,Boolean> addAllArrays(HashMap<ArrayListHolder,Boolean> tempCollec, HashMap<ArrayListHolder,Boolean> collec){
         Iterator itr = tempCollec.entrySet().iterator();
         while(itr.hasNext()){
@@ -250,8 +250,6 @@ public class Beltway{
     }
 
 
-/*Returns an empty arraylist if no beltway satisfies distance set, otherwise it returns a set of n+2 integer points 
-around a beltway of circumference w in the form : {0,d1,d2,...dn,w} where w = 0 (mod circumference) */
     public static ArrayList<Integer> beltwaySolutionsMap(int[] distances, ArrayList<Integer> initial){
 
         ArrayList<Integer> gr = initial;
@@ -259,7 +257,9 @@ around a beltway of circumference w in the form : {0,d1,d2,...dn,w} where w = 0 
         ArrayList<Integer> initCop = copyArrList(initial);
         tempCollec.put(new ArrayListHolder(initCop),true);
         while(true){
+
             if(gr.size() < 1){
+
                 return new ArrayList<Integer>();
             }
             gr = greedyRotationMap(gr,distances);
@@ -279,27 +279,28 @@ around a beltway of circumference w in the form : {0,d1,d2,...dn,w} where w = 0 
                 if(contains(tempCollec,grTemp)){
                     return new ArrayList<Integer>();
                 }
+                
                 else{
                     tempCollec.put(grTemp,true);
                 }
+                
                 
 
             }
         }
     }
+    //
     public static ArrayList<Integer> createNextInitial(HashMap<ArrayListHolder,Boolean> collec, int[] distances, ArrayList<Integer> initial){
         ArrayList<Integer> test = initial;
         ArrayListHolder t = new ArrayListHolder(test);
         HashMap<ArrayListHolder,Boolean> loopCheck = new HashMap<>();
-
         int i = 0;
+        int loop = 0;
+        int numIntegerPoints = ((int) Math.sqrt(4*distances.length + 1) + 1)/2;
         while(contains(collec,t)){
-            if(contains(loopCheck,t)){
-                return new ArrayList<Integer>();
-            }
-            else{
-                loopCheck.put(t,true);
-            }
+
+
+            //backtrack steps
             test.remove(test.size()-1);
             int begin = test.get(test.size()-1);
             if(test.size() > 0){
@@ -308,9 +309,22 @@ around a beltway of circumference w in the form : {0,d1,d2,...dn,w} where w = 0 
             test = greedilyAdd(distances,test,begin);
             t = new ArrayListHolder(test);
             i++;
+            //Check whether backtrack enters a loop
+
+            if(contains(loopCheck,t)){
+                if(loop > numIntegerPoints){
+                    return new ArrayList<Integer>();
+                }
+                else{
+                    loop++;
+                }
+            }
+            else{
+                loop = 0;
+                loopCheck.put(t,true);
+            }
         }
         return test;
-        
     }
 
 
@@ -462,31 +476,54 @@ around a beltway of circumference w in the form : {0,d1,d2,...dn,w} where w = 0 
         return ret;
     }
 
-//This requires us to put the full length of the cycle in the last element, so we will have n(n-1) + 1 elements in array.
+    /*This requires us to put the full length of the cycle in the last element, so we will have n(n-1) + 1 elements in array.
+    {1, 5, 23, 25, 28},{4, 5, 8, 10, 14}
 
-    public static void main(String[] args){
-        for(int i = 0; i < 5; i++){
-            int[] t = createRandomArrRepeat(381,1000);
-            printArrNoZero(t);            
-            System.out.println("Attempting to find solution...");
 
+     */
+
+     public static void main(String[] args){
+        int[] circ;
+        int correct = 0;
+        int incorrect = 0;
+        int num = 10;
+        while(incorrect < 5 && correct < 10){
+            circ = createRandomArrFloyd(num,40);
+            int[] t = createDistanceArray(circ);
+            System.out.println("Original integer points:");
+            printArr(circ);
+            
+            System.out.println("Current beltway: " );
+            ArrayList<Integer> circAL = new ArrayList<Integer>();
+            circAL.add(0);
+            for(int i : circ){
+                circAL.add(i);
+            }
+            printRotation(t,circAL);
+            
+            //Occasionally have to put larger number in second argument
             ArrayList<Integer> result = beltwaySolutionsMap(t);
             if(result.size() > 0){
-                System.out.println("Resulting array found: ");
-                System.out.println(result);
-                System.out.println("Rotation of array found:");
-                printRotation(t,result);
-                System.out.println("Vectors of rotations:");
+                
+                System.out.println("Answer found");
+
                 printGreedyVectorRotation(t,result);
+
+                
+                correct++;
+                result.clear();
             }
             else{
-                System.out.println("No solution found");
+                System.out.println("Incorrect for: ");
+                printArr(circ);
+                incorrect++;
+                result.clear();
             }
-            result.clear();
+            System.out.println("-----------------");
         }
-
+        System.out.println("Number correct: " + correct);
+        System.out.println("Number incorrect: " + incorrect);
     }
-
 
 
 
@@ -523,7 +560,7 @@ around a beltway of circumference w in the form : {0,d1,d2,...dn,w} where w = 0 
 
 
     public static void main(String[] args){
-        int[] circ = {6, 12, 21, 23, 24, 25, 32, 43, 63, 67, 71, 86, 102, 105, 121, 123, 172, 184, 188, 199};
+        int[] circ = {5, 6, 12, 13, 15, 20, 26, 33, 34, 37};
         int[] t = createDistanceArray(circ);
         System.out.println("Distance set:");
         printArr(t);
