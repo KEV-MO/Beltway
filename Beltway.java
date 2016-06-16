@@ -6,7 +6,7 @@ For Questions contact wasil017@umn.edu
 import java.util.*;
 
 
-public class BeltwayV20{
+public class Beltway{
 
 
     //Utility methods
