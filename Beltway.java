@@ -6,7 +6,7 @@ For Questions contact wasil017@umn.edu
 import java.util.*;
 
 
-public class Beltway{
+public class BeltwayV20{
 
 
     //Utility methods
@@ -257,18 +257,22 @@ public class Beltway{
         ArrayList<Integer> initCop = copyArrList(initial);
         tempCollec.put(new ArrayListHolder(initCop),true);
         while(true){
-
             if(gr.size() < 1){
-
                 return new ArrayList<Integer>();
             }
+
+
             gr = greedyRotationMap(gr,distances);
-
-
+            
+            
             ArrayListHolder grCop = new ArrayListHolder(gr);
             if(!contains(tempCollec,grCop)){
+
                 tempCollec.put(grCop,true);
             }
+
+            
+
             else{
                 if(checkForIdenticalDistances(distances,gr)){
                     return gr;
@@ -276,13 +280,32 @@ public class Beltway{
                 gr = createNextInitial(tempCollec,distances,initial);
                 
                 ArrayListHolder grTemp = new ArrayListHolder(gr);
+                if(gr.size() < 1){
+                    return new ArrayList<Integer>();
+                }
+
                 if(contains(tempCollec,grTemp)){
                     return new ArrayList<Integer>();
                 }
-                
                 else{
                     tempCollec.put(grTemp,true);
                 }
+                
+                
+                /*
+                else{
+                    tempCollec.put(grTemp,true);
+                }
+
+                                                if(gr.size() < 1){
+                return new ArrayList<Integer>();
+            }
+            ArrayListHolder grCop = new ArrayListHolder(gr);
+            if(!contains(tempCollec,grCop)){
+
+                tempCollec.put(grCop,true);
+            }
+                */
                 
                 
 
@@ -293,14 +316,14 @@ public class Beltway{
     public static ArrayList<Integer> createNextInitial(HashMap<ArrayListHolder,Boolean> collec, int[] distances, ArrayList<Integer> initial){
         ArrayList<Integer> test = initial;
         ArrayListHolder t = new ArrayListHolder(test);
-        HashMap<ArrayListHolder,Boolean> loopCheck = new HashMap<>();
+        ArrayList<Integer> loop = new ArrayList<>();
         int i = 0;
-        int loop = 0;
         int numIntegerPoints = ((int) Math.sqrt(4*distances.length + 1) + 1)/2;
         while(contains(collec,t)){
-
-
             //backtrack steps
+            if(i % (numIntegerPoints+1) == 0){
+                loop = copyArrList(test);
+            }
             test.remove(test.size()-1);
             int begin = test.get(test.size()-1);
             if(test.size() > 0){
@@ -308,22 +331,19 @@ public class Beltway{
             }
             test = greedilyAdd(distances,test,begin);
             t = new ArrayListHolder(test);
-            i++;
-            //Check whether backtrack enters a loop
 
-            if(contains(loopCheck,t)){
-                if(loop > numIntegerPoints){
-                    return new ArrayList<Integer>();
-                }
-                else{
-                    loop++;
-                }
+            i++;
+            if(equalsArrayList(initial,loop) || equalsArrayList(test,loop)){
+                return new ArrayList<Integer>();
             }
-            else{
-                loop = 0;
-                loopCheck.put(t,true);
-            }
+
+
         }
+        t = new ArrayListHolder(test);
+        if(contains(collec,t)){
+            return new ArrayList<Integer>();
+        }
+
         return test;
     }
 
@@ -476,56 +496,36 @@ public class Beltway{
         return ret;
     }
 
-    /*This requires us to put the full length of the cycle in the last element, so we will have n(n-1) + 1 elements in array.
-    {1, 5, 23, 25, 28},{4, 5, 8, 10, 14}
+    /*This requires us to put the full length of the cycle in the last element, so we will have n(n-1) + 1 elements in array.{2, 5, 9, 12, 13, 18, 20, 32, 34, 35};
+    distance set: {3, 10, 11, 11, 15, 18, 21}
 
 
-     */
 
-     public static void main(String[] args){
-        int[] circ;
-        int correct = 0;
-        int incorrect = 0;
-        int num = 10;
-        while(incorrect < 5 && correct < 10){
-            circ = createRandomArrFloyd(num,40);
-            int[] t = createDistanceArray(circ);
-            System.out.println("Original integer points:");
-            printArr(circ);
-            
-            System.out.println("Current beltway: " );
-            ArrayList<Integer> circAL = new ArrayList<Integer>();
-            circAL.add(0);
-            for(int i : circ){
-                circAL.add(i);
-            }
-            printRotation(t,circAL);
-            
-            //Occasionally have to put larger number in second argument
+
+*/
+
+    public static void main(String[] args){
+        for(int i = 0; i < 500; i++){
+            int[] t = createRandomArrRepeat(13,20);
+            printArrNoZero(t);            
+            System.out.println("Attempting to find solution...");
+
             ArrayList<Integer> result = beltwaySolutionsMap(t);
             if(result.size() > 0){
-                
-                System.out.println("Answer found");
-
+                System.out.println("Resulting array found: ");
+                System.out.println(result);
+                System.out.println("Rotation of array found:");
+                printRotation(t,result);
+                System.out.println("Vectors of rotations:");
                 printGreedyVectorRotation(t,result);
-
-                
-                correct++;
-                result.clear();
             }
             else{
-                System.out.println("Incorrect for: ");
-                printArr(circ);
-                incorrect++;
-                result.clear();
+                System.out.println("No solution found");
             }
-            System.out.println("-----------------");
+            result.clear();
         }
-        System.out.println("Number correct: " + correct);
-        System.out.println("Number incorrect: " + incorrect);
+
     }
-
-
 
     
         
@@ -539,7 +539,7 @@ public class Beltway{
 /*
 
     public static void main(String[] args){
-        int[] t = {1,5,20,25,72,150,225};
+        int[] t = {3, 4, 6, 7, 10, 15, 18};
 
         System.out.println("Attempting to find solution...");
         ArrayList<Integer> result = beltwaySolutionsMap(t);
@@ -600,7 +600,6 @@ public class Beltway{
             }
             printRotation(t,circAL);
             
-            //Occasionally have to put larger number in second argument
             ArrayList<Integer> result = beltwaySolutionsMap(t);
             if(result.size() > 0){
                 
@@ -624,7 +623,7 @@ public class Beltway{
         System.out.println("Number incorrect: " + incorrect);
     }
 
-
+    Note: it is extremely unlikely to find arrays, this can be used mostly to see behavior when no solution exists
     public static void main(String[] args){
         for(int i = 0; i < 500; i++){
             int[] t = createRandomArrRepeat(7,20);
