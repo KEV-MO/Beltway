@@ -15,14 +15,11 @@ public class ArrayListHolder{
         }
         @Override
         public int hashCode(){
-
-            int ret = 0;
-            int shift = 0;
-            for(int i : a){
-                shift = (shift + 11) % 21;
-                ret ^= (i + 1024) << shift;
+            Object[] toArr = new Object[a.size()];
+            for(int i = 0; i < a.size(); i++){
+                toArr[i] = a.get(i);
             }
-            return ret;
+            return Arrays.deepHashCode(toArr);
         }
         @Override
         public boolean equals(Object o){
